@@ -11,7 +11,7 @@ namespace fel {
 
 inline constexpr std::uint32_t kLibraryVersionMajor = 1;
 inline constexpr std::uint32_t kLibraryVersionMinor = 0;
-inline constexpr std::uint32_t kLibraryVersionPatch = 0;
+inline constexpr std::uint32_t kLibraryVersionPatch = 1;
 
 // On-disk journal record format.
 inline constexpr std::uint16_t kJournalFormatVersion = 1;

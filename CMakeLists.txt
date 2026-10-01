@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(FacilityEfficiencyLedger
-    VERSION 1.0.0
+    VERSION 1.0.1
     DESCRIPTION "Deterministic facility efficiency accounting ledger for a Data Center Control Plane"
     HOMEPAGE_URL "https://github.com/summonlabs/Facility-Efficiency-Ledger"
     LANGUAGES CXX)
