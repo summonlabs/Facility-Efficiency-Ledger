@@ -1,0 +1,60 @@
+# Build trees
+/build/
+/build-*/
+/out/
+/install/
+/stage/
+/_artifacts/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+compile_commands.json
+*.cmake.in.user
+
+# Visual Studio / MSVC
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.user
+*.pdb
+*.ilk
+*.exp
+*.idb
+*.obj
+*.o
+*.lib
+*.a
+*.exe
+*.dll
+*.so
+*.dylib
+*.dSYM/
+
+# Runtime ledger artefacts produced by smoke runs
+*.fel
+*.journal
+*.snapshot
+smoke/
+scratch/
+tmp/
+temp/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+*~
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Validation scratch (created and deleted by scripts)
+/validation-*/
+/fresh-clone-*/
+/.fresh-clone/

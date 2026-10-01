@@ -1,0 +1,10 @@
+# Normalise text files to LF in the repository and in the working tree so that
+# builds, tests, and digests are byte-identical on every platform.
+* text=auto eol=lf
+
+# Binary artifacts are never normalised.
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.zip binary
