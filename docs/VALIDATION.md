@@ -11,6 +11,7 @@ at all.
 | v1.0.0 | the initial runtime, declared version 1.0.0 |
 | v1.0.1 | fixes a scheduler-dependent assumption in two concurrency tests (defect 10 below), and raises the declared version so the tag and the package version agree |
 | v1.0.2 | reports the benchmark figures measured on the release build of an idle machine, alongside the earlier busy-machine figures, so the published performance range is honest rather than a single lucky run |
+| v1.0.3 | fixes the example consumer, which left its scratch ledger behind on every run (defect 11 below) |
 
 Both tags are annotated. v1.0.1 is the release validated from a fresh clone. The
 v1.0.1 tag was re-created on the version-aligned commit within the same release
@@ -144,6 +145,16 @@ These were found by the tests and the strict builds, not by inspection.
     loop iteration, which is undefined behaviour and crashed, and was corrected to
     announce exactly once per reader. The suite was then run repeatedly to confirm
     stability. Shipped as v1.0.1; v1.0.0 remains published and unchanged.
+11. **The example consumer left its scratch ledger behind.** The ledger handle was
+    still in scope when the example tried to remove its temporary directory, so on
+    Windows the removal failed and the directory was left in the temporary
+    directory on every run, silently. Found while cleaning up release artefacts,
+    not by a test, because nothing was asserting on the example's side effects.
+    Fixed by scoping the handle so it is released before the removal, and by
+    reporting a cleanup failure instead of ignoring it. The test suite itself was
+    confirmed to leave no residue on a clean run; the leftovers that prompted the
+    investigation were crash residue from defects 9 and 10.
+
 ## Package and downstream proof
 
 Recorded procedure, executed against the release state:
