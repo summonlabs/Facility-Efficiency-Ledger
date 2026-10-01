@@ -9,7 +9,8 @@ at all.
 | Tag | Contains |
 | --- | --- |
 | v1.0.0 | the initial runtime, declared version 1.0.0 |
-| v1.0.1 | fixes a scheduler-dependent assumption in two concurrency tests (defect 10 below) and raises the declared version to 1.0.1 so the tag and the package version agree |
+| v1.0.1 | fixes a scheduler-dependent assumption in two concurrency tests (defect 10 below), and raises the declared version so the tag and the package version agree |
+| v1.0.2 | reports the benchmark figures measured on the release build of an idle machine, alongside the earlier busy-machine figures, so the published performance range is honest rather than a single lucky run |
 
 Both tags are annotated. v1.0.1 is the release validated from a fresh clone. The
 v1.0.1 tag was re-created on the version-aligned commit within the same release

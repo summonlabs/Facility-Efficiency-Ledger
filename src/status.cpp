@@ -127,7 +127,7 @@ std::string Reason::message() const {
     return out;
 }
 
-std::string_view library_version_string() noexcept { return "1.0.1"; }
+std::string_view library_version_string() noexcept { return "1.0.2"; }
 
 #ifndef FEL_GIT_COMMIT
 #define FEL_GIT_COMMIT "unknown"

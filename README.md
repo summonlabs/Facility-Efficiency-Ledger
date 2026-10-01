@@ -495,23 +495,27 @@ Methodology:
   exist (`UNSUPPORTED`).
 
 Measured on AMD Ryzen 7 9800X3D (8 cores, 16 threads), Windows 11 Pro build
-26300, MSVC 19.44, Release build, `--scale=1` (2 sources x 40 measurements):
+26300, MSVC 19.44, Release build, `--scale=1` (2 sources x 40 measurements), on an otherwise idle machine. Each figure is a median over the repetitions the driver performs:
 
 | Measurement | Label | Unit | Value |
 | --- | --- | --- | --- |
-| Exact rational operations (add + multiply) | REAL | ops/s | 718,049 |
-| In-tree SHA-256 | REAL | MiB/s | 227.9 |
-| Durable commit throughput (validate, frame, append, flush, re-index) | REAL | records/s | 660 |
-| Durable commit latency | REAL | us/record | 1,514 |
-| Journal fold throughput (full deterministic replay) | REAL | records/s | 446,643 |
-| Reconciliation latency (fully classified interval) | REAL | ms/report | 1.01 |
-| Restart recovery (reopen, chain verify, tail recovery, epoch adoption) | REAL | ms | 7.50 |
-| Compaction (snapshot publication plus segment re-anchoring) | REAL | ms | 10.4 |
+| Exact rational operations (add + multiply) | REAL | ops/s | 1,400,000 |
+| In-tree SHA-256 | REAL | MiB/s | 425 |
+| Durable commit throughput (validate, frame, append, flush, re-index) | REAL | records/s | 1,140 |
+| Durable commit latency | REAL | us/record | 877 |
+| Journal fold throughput (full deterministic replay) | REAL | records/s | 580,000 |
+| Reconciliation latency (fully classified interval) | REAL | ms/report | 0.69 |
+| Restart recovery (reopen, chain verify, tail recovery, epoch adoption) | REAL | ms | 5.9 |
+| Compaction (snapshot publication plus segment re-anchoring) | REAL | ms | 8.8 |
 
-The commit number is dominated by the durable flush and is the honest one to
-quote for ingestion planning: this ledger commits about 660 records per second on
-this machine when every record is flushed to disk before it is acknowledged. Reads
-and replays are two to three orders of magnitude cheaper.
+Run-to-run variation on this workload is real and large. Two earlier runs, taken
+while the machine was still busy compiling, measured roughly half the idle-machine
+throughputs above: 660 records per second, 228 MiB/s, and a 1.5 ms commit latency.
+Treat the table as an idle-machine figure and those as a busy-machine floor. On this
+hardware the durable commit path therefore sustains somewhere between about 650 and
+1,150 records per second, dominated by the flush that makes each record durable
+before it is acknowledged. Reads and replays are two to three orders of magnitude
+cheaper.
 
 Run it yourself:
 
