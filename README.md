@@ -442,7 +442,7 @@ Recorded results, from the machine described below:
 | --- | --- |
 | Release (`/W4 /WX`) | 102 passed, 0 failed |
 | Debug (`/W4 /WX`) | 102 passed, 0 failed, zero first-party warnings |
-| RelWithDebInfo + AddressSanitizer | 102 passed, 0 failed, no sanitizer diagnostics, no leaks reported |
+| RelWithDebInfo + AddressSanitizer | 102 passed, 0 failed, no sanitizer diagnostics |
 
 Specific adversarial claims that the suite proves rather than asserts:
 
@@ -536,7 +536,9 @@ an asset inventory, a data fabric authority, a building management system) are
 represented by typed contracts and explicit evidence dispositions; none of them is
 contacted, and no integration with any of them is claimed.
 
-**UNSUPPORTED.** No claim is made about building management or DCIM telemetry
+**UNSUPPORTED.** Leak detection is not supported by the AddressSanitizer runtime used on
+this platform, so the sanitizer run proves the absence of memory errors and makes
+no claim about leaks. No claim is made about building management or DCIM telemetry
 throughput, multi-node cluster behaviour, electrical or cooling measurements, or
 any real facility efficiency outcome. There is no hardware here to prove them with,
 so they are reported as `UNSUPPORTED` rather than estimated.

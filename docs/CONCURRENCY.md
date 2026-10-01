@@ -78,6 +78,19 @@ public write (commands, seal, compact)    -> exclusive lock, then append + index
 private helpers                           -> no lock; caller must hold one
 ```
 
+## Fairness
+
+`std::shared_mutex` gives no fairness guarantee, and neither does the underlying
+platform primitive. A writer that repeatedly takes the exclusive lock can delay
+readers for an unbounded time, and readers cannot starve a writer into failing.
+The library does not promise otherwise, and no test assumes otherwise: the
+concurrency tests rendezvous with a `std::latch` after each reader has completed
+one read before the writer begins, so the assertions are about the library rather
+than about the scheduler.
+
+Operationally this means throughput under sustained mixed load is not fair, and a
+caller that needs bounded read latency should quiesce the writer or run the reader
+against a separate handle in a separate process.
 ## What is deliberately not synchronised
 
 `Store` and `LedgerView` are single-threaded components. Their accessors expose

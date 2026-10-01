@@ -4,6 +4,14 @@ This document records what was actually built, run, and observed, and it
 distinguishes real proof from synthetic input and from things that were not proven
 at all.
 
+## Release history
+
+| Tag | Contains |
+| --- | --- |
+| v1.0.0 | the initial runtime |
+| v1.0.1 | fixes a scheduler-dependent assumption in two concurrency tests (defect 10 below) |
+
+Both tags are annotated. v1.0.1 is the release validated from a fresh clone.
 ## Environment
 
 | Item | Value |
@@ -20,7 +28,7 @@ at all.
 | --- | --- | --- |
 | Release | `/W4 /permissive- /Zc:__cplusplus /Zc:preprocessor /utf-8 /WX` | clean build, zero first-party warnings |
 | Debug | same, with `/Od /RTC1` | clean build, zero first-party warnings |
-| RelWithDebInfo + ASan | `/fsanitize=address` | clean build, no sanitizer diagnostics |
+| RelWithDebInfo + ASan | `/fsanitize=address` | clean build, 102 passed, no sanitizer diagnostics; leak detection is UNSUPPORTED on this platform |
 
 The library, the CLI, the tests, and the benchmarks are all built with warnings as
 errors. A warning would fail the build, so "clean build" is a stronger statement
@@ -122,6 +130,17 @@ These were found by the tests and the strict builds, not by inspection.
    real mismatch did not throw. Fixed; several previously hidden failures surfaced
    immediately afterwards and were then fixed in turn.
 
+10. **Two concurrency tests assumed the scheduler would run their readers.** The
+    sealing and compaction tests asserted that at least one reader thread had
+    completed a read before the writer finished its burst. `std::shared_mutex`
+    gives no fairness guarantee, so a busy writer can delay readers indefinitely
+    and the assertion is not a fact about the library. Found by the fresh-clone
+    validation run of the published tag, on an otherwise idle machine. Fixed by
+    rendezvousing on a `std::latch` that each reader counts down after its first
+    completed read; the first attempt at the fix counted the latch down on every
+    loop iteration, which is undefined behaviour and crashed, and was corrected to
+    announce exactly once per reader. The suite was then run repeatedly to confirm
+    stability. Shipped as v1.0.1; v1.0.0 remains published and unchanged.
 ## Package and downstream proof
 
 Recorded procedure, executed against the release state:
@@ -172,7 +191,9 @@ repository was produced by running these binaries on this machine.
 DCIM, and no site. Adjacent runtimes are represented by typed contracts only; none
 is contacted.
 
-**UNSUPPORTED:** building management or DCIM telemetry throughput, multi-node
-cluster behaviour, electrical or cooling measurements, and any real facility
-efficiency outcome. No hardware exists here to prove them, so they are not
-estimated.
+**UNSUPPORTED:** leak detection under AddressSanitizer (the runtime available on
+this platform does not implement it, so the sanitizer run proves the absence of
+memory errors and makes no claim about leaks); building management or DCIM
+telemetry throughput; multi-node cluster behaviour; electrical or cooling
+measurements; and any real facility efficiency outcome. No hardware exists here to
+prove them, so they are not estimated.
